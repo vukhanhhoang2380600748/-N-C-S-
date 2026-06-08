@@ -1,0 +1,46 @@
+﻿@model IEnumerable<lab3.Models.Order>
+
+@{
+    ViewBag.Title = "Orders";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Order</h2>
+
+<table class="table">
+    <tr>
+        <th>#</th>
+        <th>Order ID</th>
+        <th>Customer Name</th> @* ĐẠT YÊU CẦU: Đổi từ Customer ID sang Customer Name *@
+        <th>Order Date</th>
+        <th>Delivery Date</th>
+        <th>Is Ship</th>
+        <th>Is Payment</th>
+        <th>Total</th>
+        <th></th>
+    </tr>
+    <tbody>
+        @if (Model != null && Model.Any())
+        {
+            var i = 1;
+            foreach (var item in Model)
+            {
+                <tr>
+                    <td>@i</td>
+                    <td>@item.order_ID</td> @* SỬA LỖI: Hiển thị đúng mã đơn hàng thay vì customerID *@
+                    <td>@item.customerID</td> @* Giữ @item.customerID vì ở Controller đã gán c.customer_name vào biến này *@
+                    <td>@item.orderDate</td>
+                    <td>@item.deliveryDate</td>
+                    <td>@(item.isShip == true ? "True" : "False")</td>
+                    <td>@(item.isPayment == true ? "True" : "False")</td>
+                    <td>@string.Format("{0:0,0} đ", item.total)</td> @* Định dạng tiền tệ cho đẹp và chuyên nghiệp *@
+                    <td>
+                        @* SỬA LỖI: Đổi item.order_ID thành item.orderID để không bị lỗi link *@
+                        @Html.ActionLink("Detail", "Detail", "Order", new { id = item.order_ID }, new { @class = "btn btn-default" })
+                    </td>
+                </tr>
+                i++;
+            }
+        }
+    </tbody>
+</table>

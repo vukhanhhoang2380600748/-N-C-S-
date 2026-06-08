@@ -1,0 +1,96 @@
+﻿@model IEnumerable<lab3.Models.order>
+
+@{
+    ViewBag.Title = "Purchase History";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container" style="margin-top: 30px; margin-bottom: 50px;">
+    <h2 class="text-primary"><i class="glyphicon glyphicon-list-alt"></i> My Purchase History</h2>
+    <p class="text-muted">Review your previous orders, invoices, and bought products.</p>
+    <hr />
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-warning text-center">
+            <h4>You haven't bought any books yet!</h4>
+            <a href="@Url.Action("Index", "Book")" class="btn btn-primary" style="margin-top: 10px;">Shop Now</a>
+        </div>
+    }
+    else
+    {
+        foreach (var order in Model)
+        {
+            <div class="panel panel-info" style="margin-bottom: 25px; border-radius: 4px; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
+                <div class="panel-heading" style="background-color: #d9edf7; color: #31708f;">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <strong>Order ID:</strong> <span class="label label-primary" style="font-size: 13px;">#@order.order_id</span>
+                        </div>
+                        <div class="col-md-3">
+                            <strong>Order Date:</strong> @string.Format("{0:dd/MM/yyyy HH:mm}", order.order_date)
+                        </div>
+                        <div class="col-md-3">
+                            <strong>Delivery Date:</strong> @string.Format("{0:dd/MM/yyyy}", order.delivery_date)
+                        </div>
+                        <div class="col-md-3 text-right">
+                            <strong>Status:</strong>
+                            @if (order.isship == true)
+                            {
+                                <span class="text-success" style="font-weight: bold;"><i class="glyphicon glyphicon-ok-sign"></i> Shipped</span>
+                            }
+                            else
+                            {
+                                <span class="text-warning" style="font-weight: bold;"><i class="glyphicon glyphicon-time"></i> Processing</span>
+                            }
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel-body">
+                    <table class="table table-hover table-striped" style="margin-bottom: 0;">
+                        <thead>
+                            <tr class="active">
+                                <th style="width: 50%">Book Name</th>
+                                <th style="width: 15%" class="text-center">Quantity</th>
+                                <th style="width: 15%" class="text-right">Unit Price</th>
+                                <th style="width: 20%" class="text-right">Subtotal</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @* FIX LỖI 1: Ép kiểu sang ToList() để không bị lỗi EntitySet ở vòng lặp *@
+                            @foreach (var detail in order.orderdetails.ToList())
+                            {
+                                <tr>
+                                    <td>
+                                        <strong style="color: #333;">@detail.book.book_name</strong>
+                                    </td>
+                                    <td class="text-center">@detail.quantity</td>
+                                    <td class="text-right">@string.Format("{0:0,0} đ", detail.price)</td>
+                                    <td class="text-right" style="font-weight: 500;">
+                                        @string.Format("{0:0,0} đ", (detail.quantity * detail.price))
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="panel-footer text-right" style="background-color: #f5f5f5;">
+                    <span style="font-size: 15px; margin-right: 15px;">
+                        Payment Method: <strong>COD (Cash on Delivery)</strong>
+                        [@(order.ispayment == true ? "Paid" : "Unpaid")]
+                    </span>
+                    <span style="font-size: 16px; color: #d9534f; font-weight: bold;">
+                        @* FIX LỖI 2: Ép kiểu sang ToList() trước khi tính hàm Sum để dập tắt lỗi EntitySet thứ hai *@
+                        Total Invoice: @string.Format("{0:0,0} đ", order.orderdetails.ToList().Sum(d => (d.quantity ?? 0) * (d.price ?? 0)))
+                    </span>
+                </div>
+            </div>
+        }
+    }
+
+    <div style="margin-top: 20px;">
+        <a href="@Url.Action("Index", "Book")" class="btn btn-default"><i class="glyphicon glyphicon-arrow-left"></i> Back to Store</a>
+    </div>
+</div>

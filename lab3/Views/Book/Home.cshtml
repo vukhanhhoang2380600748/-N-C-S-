@@ -1,0 +1,88 @@
+﻿@using PagedList.Mvc;
+@model PagedList.IPagedList<lab3.Models.book>
+
+@{
+    ViewBag.Title = "Home";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>HUTECH LIBRARY</h2>
+
+@* Form để chọn số lượng sách hiển thị trên 1 trang *@
+<div class="row">
+    <div class="col-md-6 col-lg-6 col-xs-6 col-sm-6">
+        @using (Html.BeginForm("Home", "Book", FormMethod.Get))
+        {
+            <p>
+                Size of page:@Html.DropDownList("size", (List<SelectListItem>)ViewBag.size, new
+                {
+   @onchange = "this.form.submit();"
+                })
+            </p>
+        }
+    </div>
+    <div class="col-md-6 col-lg-6 col-xs-6 col-sm-6 text-right">
+        Page: @(Model.PageCount<Model.PageNumber? 0:Model.PageNumber)/@Model.PageCount
+    </div>
+</div>
+@Html.PagedListPager(Model, page => Url.Action("Home", new { page, size = ViewBag.currentSize }))
+<hr />
+
+<div class="row">
+    @foreach (var item in Model)
+    {
+        <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <strong>@item.book_name</strong>
+                </div>
+
+                <div class="panel-body">
+                    <p><strong>Price: </strong><span class="text-danger">@item.price</span></p>
+                    <p><strong>Date Update: </strong>@item.update_date</p>
+                    <p><strong>Quantity in stock: </strong>@item.quantity_instock</p>
+                    <div class="text-center">
+                        <img src="@item.image" alt="hinh thumbnail" class="img-thumbnail" style="height:200px;" />
+                    </div>
+                </div>
+
+                <div class="panel-footer clearfix">
+
+                </div>
+                <div class="pull-right">
+                    @Html.ActionLink("Read more...", "Detail", new { id = item.book_id }, new
+                    {
+                        @class = "btn btn-default"
+                    })
+
+                    <a class="btn btn-success" href="@Url.Action("AddCart", "Cart",new { @id =
+                    item.book_id, @strURL = Request.Url.ToString()})">Order</a>
+                </div>
+            </div>
+        </div>
+
+    }
+</div>
+
+@* Phần hiển thị phân trang *@
+<div class="pagination-container" style="text-align:center">
+    <p>Trang @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) / @Model.PageCount</p>
+    @Html.PagedListPager(Model, page => Url.Action("Home", new { page, size = Request.QueryString["size"] }))
+</div>
+
+<style>
+    .panel-heading {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        background-color: #f8f9fa !important;
+    }
+
+    .panel-body {
+        min-height: 320px;
+    }
+
+    .pagination-container .pagination {
+        margin-top: 10px;
+    }
+</style>

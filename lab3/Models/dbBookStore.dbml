@@ -1,0 +1,57 @@
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="BookStore" Class="dbBookStoreDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Table Name="dbo.customers" Member="customers">
+    <Type Name="customer">
+      <Column Name="customer_id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="customer_name" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="username" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
+      <Column Name="password" Type="System.String" DbType="VarChar(10)" CanBeNull="true" />
+      <Column Name="email" Type="System.String" DbType="VarChar(30)" CanBeNull="true" />
+      <Column Name="address" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
+      <Column Name="numberphone" Type="System.String" DbType="VarChar(12)" CanBeNull="true" />
+      <Column Name="dob" Type="System.DateTime" DbType="SmallDateTime" CanBeNull="true" />
+      <Association Name="customer_order" Member="orders" ThisKey="customer_id" OtherKey="customer_id" Type="order" />
+    </Type>
+  </Table>
+  <Table Name="dbo.books" Member="books">
+    <Type Name="book">
+      <Column Name="book_id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="publishers_id" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="book_name" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
+      <Column Name="image" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="price" Type="System.Decimal" DbType="Decimal(18,0)" CanBeNull="true" />
+      <Column Name="update_date" Type="System.DateTime" DbType="SmallDateTime" CanBeNull="true" />
+      <Column Name="quantity_instock" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Association Name="book_orderdetail" Member="orderdetails" ThisKey="book_id" OtherKey="book_id" Type="orderdetail" />
+      <Association Name="publisher_book" Member="publisher" ThisKey="publishers_id" OtherKey="publishers_id" Type="publisher" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.orderdetails" Member="orderdetails">
+    <Type Name="orderdetail">
+      <Column Name="order_id" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="book_id" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="quantity" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="price" Type="System.Decimal" DbType="Decimal(18,0)" CanBeNull="true" />
+      <Association Name="book_orderdetail" Member="book" ThisKey="book_id" OtherKey="book_id" Type="book" IsForeignKey="true" />
+      <Association Name="order_orderdetail" Member="order" ThisKey="order_id" OtherKey="order_id" Type="order" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.orders" Member="orders">
+    <Type Name="order">
+      <Column Name="order_id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="ispayment" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="isship" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="order_date" Type="System.DateTime" DbType="Date" CanBeNull="true" />
+      <Column Name="delivery_date" Type="System.DateTime" DbType="Date" CanBeNull="true" />
+      <Column Name="customer_id" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Association Name="order_orderdetail" Member="orderdetails" ThisKey="order_id" OtherKey="order_id" Type="orderdetail" />
+      <Association Name="customer_order" Member="customer" ThisKey="customer_id" OtherKey="customer_id" Type="customer" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.publishers" Member="publishers">
+    <Type Name="publisher">
+      <Column Name="publishers_id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="publishers_name" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Association Name="publisher_book" Member="books" ThisKey="publishers_id" OtherKey="publishers_id" Type="book" />
+    </Type>
+  </Table>
+</Database>

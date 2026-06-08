@@ -1,0 +1,4 @@
+<!-- Add this ItemGroup to your project file to reference System.Data.Linq (required for EntitySet<>) -->
+<ItemGroup>
+  <Reference Include="System.Data.Linq" />
+</ItemGroup>

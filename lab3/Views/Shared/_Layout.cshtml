@@ -1,0 +1,69 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - My ASP.NET Application</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+<body>
+    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark">
+        <div class="container">
+            @Html.ActionLink("Hutech Library", "Index", "Book", new { area = "" }, new { @class = "navbar-brand" })
+            <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" title="Toggle navigation" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse d-sm-inline-flex justify-content-between">
+                <ul class="navbar-nav flex-grow-1">
+                    @* Đồng bộ kiểm tra Session["User"] theo đúng UserController.cs của bạn *@
+                    @if (Session["User"] == null)
+                    {
+                        <li class="nav-item">@Html.ActionLink("Home", "Home", "Book", new { area = "" }, new { @class = "nav-link" })</li>
+                        <li class="nav-item">@Html.ActionLink("Register", "Register", "User", null, new { @class = "nav-link" })</li>
+                        <li class="nav-item">@Html.ActionLink("Login", "Login", "User", null, new { @class = "nav-link" })</li>
+                    }
+                    else
+                    {
+                        // Ép kiểu Session["User"] để lấy thông tin người dùng đang đăng nhập
+                        lab3.Models.customer kh = (lab3.Models.customer)Session["User"];
+
+                        @* Biến lời chào thành liên kết, bấm vào sẽ nhảy tới trang thông tin cá nhân (Profile) *@
+                        <li class="nav-item">
+                            @Html.ActionLink("Hello: " + kh.customer_name, "Profile", "User", null, new { @class = "nav-link", style = "color: #9cdcfe; font-weight: bold;" })
+                        </li>
+
+                        @* Tính năng 12 nâng cao: Thêm nút xem Lịch sử mua hàng của riêng tài khoản này *@
+                        <li class="nav-item">
+                            @Html.ActionLink("Purchase History", "PurchaseHistory", "Order", null, new { @class = "nav-link" })
+                        </li>
+                    }
+
+                    <li class="nav-item">@Html.ActionLink("About", "About", "Book", new { area = "" }, new { @class = "nav-link" })</li>
+                    <li class="nav-item">@Html.ActionLink("Contact", "Contact", "Book", new { area = "" }, new { @class = "nav-link" })</li>
+                    <li class="nav-item">@Html.ActionLink("Orders", "Orders", "Order", new { area = "" }, new { @class = "nav-link" })</li>
+
+
+                    <li class="nav-item">@Html.ActionLink("Statistic", "StatisticBook", "Statistic", new { area = "" }, new { @class = "nav-link" })</li>
+                    <li class="nav-item">@Html.Partial("~/Views/Cart/CartPartial.cshtml")</li>
+                   
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container body-content">
+        @RenderBody()
+        <hr />
+        <footer>
+            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
+        </footer>
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+    @RenderSection("upload", required: false)
+</body>
+</html>

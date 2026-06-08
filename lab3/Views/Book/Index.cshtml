@@ -1,0 +1,176 @@
+﻿@model PagedList.IPagedList<lab3.Models.book>
+@using PagedList.Mvc;
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .book-img {
+        width: 300px;
+        height: 400px;
+        object-fit: cover;
+        border-radius: 10px;
+    }
+
+    .pagination-container {
+        text-align: center;
+        margin-top: 30px;
+    }
+
+    .pagination {
+        display: inline-flex;
+        gap: 8px;
+        padding-left: 0;
+        list-style: none;
+    }
+
+        .pagination li a,
+        .pagination li span {
+            padding: 10px 16px;
+            border-radius: 10px;
+            border: 1px solid #ddd;
+            background-color: white;
+            color: #333;
+            text-decoration: none;
+        }
+
+            .pagination li a:hover {
+                background-color: #0d6efd;
+                color: white;
+            }
+
+        .pagination > .active > a,
+        .pagination > .active > span {
+            background-color: #ff6600;
+            border-color: #ff6600;
+            color: white;
+        }
+
+    .top-bar {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 20px;
+    }
+
+    .search-box {
+        display: flex;
+        gap: 10px;
+    }
+
+    .panel {
+        border-radius: 10px;
+    }
+</style>
+
+<h2>HUTECH LIBRARY</h2>
+
+<div class="top-bar">
+
+    @using (Html.BeginForm("Index", "Book", FormMethod.Get, new { @class = "search-box" }))
+    {
+    <input type="text"
+           name="searchString"
+           value="@ViewBag.Keyword"
+           placeholder="Enter book title..." />
+
+    <select name="size"
+            onchange="this.form.submit()">
+
+        <option value="3" @(ViewBag.Size == 3 ? "selected" : "")>
+            3 / page
+        </option>
+
+        <option value="6" @(ViewBag.Size == 6 ? "selected" : "")>
+            6 / page
+        </option>
+
+        <option value="9" @(ViewBag.Size == 9 ? "selected" : "")>
+            9 / page
+        </option>
+
+    </select>
+
+    <input type="submit"
+           value="Search"
+           class="btn btn-primary" />
+    }
+
+</div>
+
+<div class="row">
+
+    @foreach (var item in Model)
+    {
+    <div class="col-lg-4 col-md-4 col-sm-6">
+
+        <div class="panel panel-default">
+
+            <div class="panel-heading">
+                <strong>@item.book_name</strong>
+            </div>
+
+            <div class="panel-body">
+
+                <p>
+                    <strong>Price:</strong>
+                    @item.price
+                </p>
+
+                <p>
+                    <strong>Quantity:</strong>
+                    @item.quantity_instock
+                </p>
+
+                <img src="@item.image"
+                     class="book-img" />
+
+            </div>
+
+            <div class="panel-footer text-center">
+
+                @Html.ActionLink(
+                "Read more",
+                        "Detail",
+                        new { id = item.book_id },
+                        new { @class = "btn btn-primary" })
+
+                <a class="btn btn-success"
+                   href="@Url.Action(
+                       "AddCart",
+                       "Cart",
+                       new
+                       {
+                           id = item.book_id,
+                      strURL = Request.RawUrl
+                       })">
+                    Order
+                </a>
+
+                @Html.ActionLink("Delete", "Delete", new { id = item.book_id },
+new { @class = "btn btn-primary" })
+
+            </div>
+
+        </div>
+
+    </div>
+    }
+
+</div>
+
+<div class="pagination-container">
+
+    @Html.PagedListPager(
+        Model,
+        page => Url.Action(
+            "Index",
+            new
+            {
+                page,
+                size = ViewBag.Size,
+                searchString = ViewBag.Keyword
+            }))
+
+</div>

@@ -1,0 +1,57 @@
+﻿@model IEnumerable<lab3.Models.Cart>
+@{
+    ViewBag.Title = "Cart";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Your Cart</h2>
+<table class="table">
+    <tr>
+        <th>@Html.DisplayNameFor(model => model.book_name)</th>
+        <th>@Html.DisplayNameFor(model => model.image)</th>
+        <th>@Html.DisplayNameFor(model => model.price)</th>
+        <th>@Html.DisplayNameFor(model => model.iquantity)</th>
+        <th>@Html.DisplayNameFor(model => model.Total)</th>
+        <th></th>
+    </tr>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td> @Html.DisplayFor(modelItem => item.book_name) </td>
+            <td> <img src="@item.image" width="120" /> </td>
+            <td> @String.Format("{0:0,0}", item.price) USD </td>
+
+            <td>
+                @using (Html.BeginForm("CartUpdate", "Cart", new { id = item.book_id }, FormMethod.Post))
+                {
+                    <div style="display: flex; gap: 5px;">
+                        <input type="number" min="1" name="txtSoLg" value="@item.iquantity" class="form-control" style="width:70px; display:inline-block;" />
+                        <input type="submit" value="Update" class="btn btn-success btn-sm" />
+                    </div>
+                }
+            </td>
+
+            <td> @String.Format("{0:0,0}", item.Total) USD </td>
+            <td>
+                <a href="@Url.Action("Detail","Book",new{id=item.book_id})" class="btn btn-default btn-sm">Detail</a> |
+                @Html.ActionLink("Delete", "CartDelete", new { id = item.book_id }, new { @class = "btn btn-danger btn-sm" })
+            </td>
+        </tr>
+    }
+
+    <tr style="font-weight:bold; text-align:left; color:red">
+        <td colspan="2"> Quantity Sum: @ViewBag.sumProductQuantity </td>
+        <td colspan="2"> Quantity Total: @ViewBag.sumQuantity </td>
+        <td colspan="2"> Total: @String.Format("{0:0,0}", @ViewBag.Total) USD </td>
+    </tr>
+    <tr style="font-weight:bold; text-align:right ">
+        <td colspan="6">
+            @Html.ActionLink("Cart Delete All", "AllCartDelete", null, new { @class = "btn btn-warning btn-sm" })
+        </td>
+    </tr>
+    <tr style="font-weight:bold; text-align:right ">
+        <td colspan="6" style="padding-top:15px;">
+            @Html.ActionLink("Place order", "PlaceOrder", "Cart", null, new { @class = "btn btn-primary btn-lg" })
+        </td>
+    </tr>
+</table>

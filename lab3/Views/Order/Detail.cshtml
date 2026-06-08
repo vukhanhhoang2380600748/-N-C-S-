@@ -1,0 +1,40 @@
+﻿@model IEnumerable<lab3.Models.OrderDetailViewModel>
+
+@{
+    ViewBag.Title = "Detail";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Order Detail</h2>
+
+<table class="table">
+    <tr>
+        <th>#</th>
+        <th>Order ID</th>
+        <th>Book Name</th> @* Đổi Book ID -> Book Name  *@
+        <th>Quantity</th>
+        <th>Price</th>
+        <th>Total</th> @* Thêm cột Total sau cột Price  *@
+    </tr>
+
+    @if (Model != null && Model.Any())
+    {
+        var i = 1;
+        foreach (var item in Model)
+        {
+            <tr>
+                <td>@i</td>
+                <td>@item.OrderID</td>
+                <td>@item.BookName</td>
+                <td>@item.Quantity</td>
+                <td>@string.Format("{0:0,0} đ", item.Price)</td>
+                <td>@string.Format("{0:0,0} đ", item.TotalPrice)</td>
+            </tr>
+            i++;
+        }
+    }
+</table>
+
+<p>
+    @Html.ActionLink("Back to List", "Orders", "Order")
+</p>
