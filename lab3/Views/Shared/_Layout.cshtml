@@ -3,61 +3,193 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title - My ASP.NET Application</title>
+    <title>@ViewBag.Title - Hutech BookStore</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <style>
+        /* CSS tùy biến giao diện theo phong cách Fahasa */
+        body {
+            background-color: #f0f0f0;
+            font-family: Arial, sans-serif;
+        }
+
+        .top-banner img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .main-header {
+            background-color: #ffffff;
+            padding: 15px 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .brand-logo {
+            font-size: 26px;
+            font-weight: bold;
+            color: #cd1818 !important;
+            text-decoration: none;
+        }
+
+        .search-box .form-control {
+            border: 2px solid #cd1818;
+            border-top-left-radius: 8px;
+            border-bottom-left-radius: 8px;
+        }
+
+        .search-box .btn-search {
+            background-color: #cd1818;
+            color: white;
+            border: 2px solid #cd1818;
+            border-top-right-radius: 8px;
+            border-bottom-right-radius: 8px;
+            padding: 0 20px;
+        }
+
+        .search-box .btn-search:hover {
+            background-color: #a31212;
+            border-color: #a31212;
+            color: white;
+        }
+
+        .header-icon-link {
+            text-decoration: none !important;
+            color: #555555 !important;
+            font-size: 13px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .header-icon-link i {
+            font-size: 22px;
+            color: #666666;
+            margin-bottom: 2px;
+        }
+
+        .header-icon-link:hover, .header-icon-link:hover i {
+            color: #cd1818 !important;
+        }
+        /* Menu điều hướng phụ */
+        .sub-nav {
+            background-color: #ffffff !important;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .sub-nav .nav-link {
+            color: #333333 !important;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .sub-nav .nav-link:hover {
+            color: #cd1818 !important;
+        }
+    </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark">
+
+    <div class="top-banner">
+        <a href="#">
+            <img src="https://placehold.co/1920x60/cd1818/white?text=DELI+RỰC+RỠ+CHÀO+HÈ+-+GIẢM+ĐẾN+20%25" alt="Banner">
+        </a>
+    </div>
+
+    <div class="main-header">
         <div class="container">
-            @Html.ActionLink("Hutech Library", "Index", "Book", new { area = "" }, new { @class = "navbar-brand" })
-            <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" title="Toggle navigation" aria-controls="navbarSupportedContent"
-                    aria-expanded="false" aria-label="Toggle navigation">
+            <div class="row align-items-center">
+
+                <div class="col-lg-3 col-md-4 col-12 text-center text-md-left mb-2 mb-md-0">
+                    @Html.ActionLink("Fahasa.Hutech", "Index", "Book", new { area = "" }, new { @class = "brand-logo" })
+                </div>
+
+                <div class="col-lg-5 col-md-4 col-12 mb-2 mb-md-0">
+                    @using (Html.BeginForm("Index", "Book", FormMethod.Get, new { @class = "w-100" }))
+                    {
+                        <div class="input-group search-box">
+                            <input type="text" 
+                                   name="searchString" 
+                                   class="form-control" 
+                                   placeholder="Nhập tên sách cần tìm..." 
+                                   value="@ViewBag.Keyword">
+                            
+                            <input type="hidden" name="size" value="@(ViewBag.Size ?? 3)" />
+
+                            <div class="input-group-append">
+                                <button class="btn btn-search" type="submit">
+                                    <i class="bi bi-search"></i>
+                                </button>
+                            </div>
+                        </div>
+                    }
+                </div>
+
+                <div class="col-lg-4 col-md-4 col-12 d-flex justify-content-center justify-content-md-end align-items-center" style="gap: 25px;">
+
+                    <a href="#" class="header-icon-link">
+                        <i class="bi bi-bell"></i>
+                        <span>Thông báo</span>
+                    </a>
+
+                    @Html.Partial("~/Views/Cart/CartPartial.cshtml")
+
+                    <div class="d-flex align-items-center" style="gap: 10px;">
+                        @if (Session["User"] == null)
+                        {
+                            <a href="@Url.Action("Login", "User")" class="header-icon-link">
+                                <i class="bi bi-person"></i>
+                                <span>Đăng nhập</span>
+                            </a>
+                        }
+                        else
+                        {
+                            var kh = Session["User"] as lab3.Models.customer;
+                            if (kh != null)
+                            {
+                                <a href="@Url.Action("Profile", "User")" class="header-icon-link">
+                                    <i class="bi bi-person-check-fill" style="color: #cd1818;"></i>
+                                    <span style="color: #cd1818; font-weight: bold;">@kh.customer_name</span>
+                                </a>
+
+                                <a href="@Url.Action("PurchaseHistory", "Order")" class="header-icon-link" title="Lịch sử mua hàng">
+                                    <i class="bi bi-clock-history"></i>
+                                    <span>Lịch sử</span>
+                                </a>
+                            }
+                        }
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <nav class="navbar navbar-expand-sm navbar-light sub-nav sticky-top border-bottom">
+        <div class="container">
+            <button type="button" class="navbar-toggler ml-auto" data-toggle="collapse" data-target=".navbar-collapse">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <div class="collapse navbar-collapse d-sm-inline-flex justify-content-between">
-                <ul class="navbar-nav flex-grow-1">
-                    @* Đồng bộ kiểm tra Session["User"] theo đúng UserController.cs của bạn *@
-                    @if (Session["User"] == null)
-                    {
-                        <li class="nav-item">@Html.ActionLink("Home", "Home", "Book", new { area = "" }, new { @class = "nav-link" })</li>
-                        <li class="nav-item">@Html.ActionLink("Register", "Register", "User", null, new { @class = "nav-link" })</li>
-                        <li class="nav-item">@Html.ActionLink("Login", "Login", "User", null, new { @class = "nav-link" })</li>
-                    }
-                    else
-                    {
-                        // Ép kiểu Session["User"] để lấy thông tin người dùng đang đăng nhập
-                        lab3.Models.customer kh = (lab3.Models.customer)Session["User"];
-
-                        @* Biến lời chào thành liên kết, bấm vào sẽ nhảy tới trang thông tin cá nhân (Profile) *@
-                        <li class="nav-item">
-                            @Html.ActionLink("Hello: " + kh.customer_name, "Profile", "User", null, new { @class = "nav-link", style = "color: #9cdcfe; font-weight: bold;" })
-                        </li>
-
-                        @* Tính năng 12 nâng cao: Thêm nút xem Lịch sử mua hàng của riêng tài khoản này *@
-                        <li class="nav-item">
-                            @Html.ActionLink("Purchase History", "PurchaseHistory", "Order", null, new { @class = "nav-link" })
-                        </li>
-                    }
-
+            <div class="collapse navbar-collapse">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item">@Html.ActionLink("Home", "Home", "Book", new { area = "" }, new { @class = "nav-link" })</li>
                     <li class="nav-item">@Html.ActionLink("About", "About", "Book", new { area = "" }, new { @class = "nav-link" })</li>
                     <li class="nav-item">@Html.ActionLink("Contact", "Contact", "Book", new { area = "" }, new { @class = "nav-link" })</li>
                     <li class="nav-item">@Html.ActionLink("Orders", "Orders", "Order", new { area = "" }, new { @class = "nav-link" })</li>
-
-
                     <li class="nav-item">@Html.ActionLink("Statistic", "StatisticBook", "Statistic", new { area = "" }, new { @class = "nav-link" })</li>
-                    <li class="nav-item">@Html.Partial("~/Views/Cart/CartPartial.cshtml")</li>
-                   
                 </ul>
             </div>
         </div>
     </nav>
 
-    <div class="container body-content">
+    <div class="container body-content mt-4" style="min-vh: 100%;">
         @RenderBody()
         <hr />
-        <footer>
-            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
+        <footer class="text-center py-3 bg-white border-top mt-4">
+            <p class="mb-0">&copy; @DateTime.Now.Year - Hệ thống Nhà sách  I-Hutech </p>
         </footer>
     </div>
 

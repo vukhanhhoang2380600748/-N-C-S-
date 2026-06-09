@@ -2,7 +2,22 @@
     Layout = null;
 }
 
-<a class="getstarted scrollto active" href="@Url.Action("Cart", "Cart")"
-   style="font-weight:bold; text-decoration:none">
-    Cart (@ViewBag.sumProductQuantity)
+<a href="@Url.Action("Cart", "Cart")" class="header-icon-link position-relative" style="text-decoration: none;">
+    <i class="bi bi-cart3" style="font-size: 24px;"></i>
+    <span class="d-none d-md-inline">Giỏ hàng</span>
+
+    @if (ViewBag.sumProductQuantity != null && ViewBag.sumProductQuantity > 0)
+    {
+        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+              style="font-size: 11px; padding: 4px 6px; transform: translate(50%, -20%) !important;">
+            @ViewBag.sumProductQuantity
+        </span>
+    }
+    else
+    {
+        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary"
+              style="font-size: 11px; padding: 4px 6px; transform: translate(50%, -20%) !important;">
+            0
+        </span>
+    }
 </a>
