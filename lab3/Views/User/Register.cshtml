@@ -1,98 +1,123 @@
 ﻿@model lab3.Models.customer
-
 @{
     ViewBag.Title = "Register";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Register</h2>
+<div class="row justify-content-center" style="margin-top: 40px; margin-bottom: 40px;">
+    <div class="col-md-8 col-md-offset-2 col-lg-6 col-lg-offset-3">
+        <div class="panel panel-default shadow-sm" style="padding: 30px; background: #ffffff; border: 1px solid #e0e0e0; border-radius: 8px;">
 
-@using (Html.BeginForm()) 
-{
-    @Html.AntiForgeryToken()
-    
-<div class="form-horizontal">
-    <h4>customer</h4>
-    <hr />
-    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-    <div class="form-group">
-        @Html.LabelFor(model => model.customer_name, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.customer_name, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.customer_name, "", new { @class = "text-danger" })
+            <h2 class="text-center" style="font-weight: bold; color: #cd1818; margin-bottom: 25px; font-family: Arial, sans-serif;">ĐĂNG KÝ TÀI KHOẢN</h2>
+
+            @using (Html.BeginForm())
+            {
+                @Html.AntiForgeryToken()
+
+                <div class="form-horizontal">
+
+                    @if (ViewData["Error"] != null)
+                    {
+                        <div class="alert alert-danger text-center" style="padding: 10px; border-radius: 5px; font-size: 14px; margin-bottom: 20px;">
+                            <i class="bi bi-exclamation-triangle-fill"></i> @ViewData["Error"]
+                        </div>
+                    }
+
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                    <div class="form-group">
+                        <label class="control-label col-md-3" style="font-weight: bold;">Họ tên khách hàng:</label>
+                        <div class="col-md-9">
+                            @Html.EditorFor(model => model.customer_name, new { htmlAttributes = new { @class = "form-control", placeholder = "Nhập họ và tên...", required = "required" } })
+                            @Html.ValidationMessageFor(model => model.customer_name, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-3" style="font-weight: bold;">Tên đăng nhập:</label>
+                        <div class="col-md-9">
+                            @Html.EditorFor(model => model.username, new { htmlAttributes = new { @class = "form-control", placeholder = "Nhập tên tài khoản...", required = "required" } })
+                            @Html.ValidationMessageFor(model => model.username, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-3" style="font-weight: bold;">Mật khẩu:</label>
+                        <div class="col-md-9">
+                            @Html.EditorFor(model => model.password, new { htmlAttributes = new { @class = "form-control", type = "password", placeholder = "Nhập mật khẩu...", required = "required" } })
+                            @Html.ValidationMessageFor(model => model.password, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-3" style="font-weight: bold; color: #333;" for="confirmpassword">Xác nhận mật khẩu:</label>
+                        <div class="col-md-9">
+                            <input class="form-control text-box single-line"
+                                   id="confirmpassword"
+                                   name="confirmpassword"
+                                   type="password"
+                                   placeholder="Nhập lại mật khẩu để xác nhận..."
+                                   required="required" />
+
+                            @if (ViewData["enterpassword"] != null)
+                            {
+                                <span class="text-danger" style="font-size: 13px; display: block; margin-top: 5px;"><i class="bi bi-x-circle"></i> @ViewData["enterpassword"]</span>
+                            }
+                            @if (ViewData["samepassword"] != null)
+                            {
+                                <span class="text-danger" style="font-size: 13px; display: block; margin-top: 5px;"><i class="bi bi-x-circle"></i> @ViewData["samepassword"]</span>
+                            }
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-3" style="font-weight: bold;">Địa chỉ Email:</label>
+                        <div class="col-md-9">
+                            @Html.EditorFor(model => model.email, new { htmlAttributes = new { @class = "form-control", type = "email", placeholder = "vi-du-email-cua-ban@gmail.com", required = "required" } })
+                            @Html.ValidationMessageFor(model => model.email, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-3" style="font-weight: bold;">Địa chỉ cư trú:</label>
+                        <div class="col-md-9">
+                            @Html.EditorFor(model => model.address, new { htmlAttributes = new { @class = "form-control", placeholder = "Số nhà, tên đường, phường/xã, quận/huyện..." } })
+                            @Html.ValidationMessageFor(model => model.address, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-3" style="font-weight: bold;">Số điện thoại:</label>
+                        <div class="col-md-9">
+                            @Html.EditorFor(model => model.numberphone, new { htmlAttributes = new { @class = "form-control", placeholder = "Nhập số điện thoại liên hệ..." } })
+                            @Html.ValidationMessageFor(model => model.numberphone, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-3" style="font-weight: bold;">Ngày tháng năm sinh:</label>
+                        <div class="col-md-9">
+                            @Html.EditorFor(model => model.dob, new { htmlAttributes = new { @class = "form-control", type = "date", required = "required" } })
+                            @Html.ValidationMessageFor(model => model.dob, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group" style="margin-top: 30px; margin-bottom: 0;">
+                        <div class="col-md-offset-3 col-md-9">
+                            <button type="submit" class="btn btn-danger btn-block" style="width: 100%; height: 45px; font-weight: bold; background-color: #cd1818; border-color: #cd1818; font-size: 16px; border-radius: 6px;">
+                                Đăng Ký & Nhận Mã OTP Qua Email
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+            }
+
+            <div class="text-center" style="margin-top: 20px; border-top: 1px solid #eee; padding-top: 15px;">
+                <a href="@Url.Action("Login", "User")" style="font-size: 14px; color: #666; text-decoration: none;">
+                    Bạn đã có tài khoản? <span style="color: #cd1818; font-weight: bold;">Đăng nhập ngay</span>
+                </a>
+            </div>
         </div>
     </div>
-
-    <div class="form-group">
-        @Html.LabelFor(model => model.username, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.username, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.username, "", new { @class = "text-danger" })
-        </div>
-    </div>
-
-    <div class="form-group">
-        @Html.LabelFor(model => model.password, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.password, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.password, "", new { @class = "text-danger" })
-        </div>
-    </div>
-
-    <div class="form-group">
-        @Html.LabelFor(model => model.email, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.email, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.email, "", new { @class = "text-danger" })
-        </div>
-    </div>
-
-    <div class="form-group">
-        @Html.LabelFor(model => model.address, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.address, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.address, "", new { @class = "text-danger" })
-        </div>
-    </div>
-
-    <div class="form-group">
-        @Html.LabelFor(model => model.numberphone, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.numberphone, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.numberphone, "", new { @class = "text-danger" })
-        </div>
-    </div>
-
-    <div class="form-group">
-        @Html.LabelFor(model => model.dob, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.dob, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.dob, "", new { @class = "text-danger" })
-        </div>
-    </div>
-
-    <div class="form-group">
-        <div class="col-md-offset-2 col-md-10">
-            <input type="submit" value="Create" class="btn btn-default" />
-        </div>
-    </div>
-   
-    <div class="form-group">
-        <label class="control-label col-md-2" for="comfirmpassword">confirm password: </label>
-        <div class="col-md-10">
-
-            <input class="form-control text-box single-line input-validation-error" data-
-                   val="true" data-val-required="Must enter password to confirm!"
-                   id="confirmpassword" name="confirmpassword" type="password" value="" aria-
-                   describedby="confirmpassword-error" aria-invalid="true">
-
-            @ViewData["enterpassword"]
-            @ViewData["samepassword"]
-        </div>
-    </div>
-</div>
-}
-
-<div>
-    @Html.ActionLink("Back to List", "Index")
 </div>

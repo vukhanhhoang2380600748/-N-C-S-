@@ -4,102 +4,85 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Create</h2>
+<h2 style="color: #cd1818; font-weight: bold; margin-bottom: 20px;">THÊM SÁCH MỚI</h2>
 
-@* Thêm thuộc tính enctype để hỗ trợ truyền file *@
 @using (Html.BeginForm("Create", "Book", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
     @Html.AntiForgeryToken()
 
     <div class="form-horizontal">
-        <h4>book</h4>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
-        @* --- Tên sách --- *@
         <div class="form-group">
-            @Html.LabelFor(model => model.book_name, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.book_name, "Tên sách", new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.EditorFor(model => model.book_name, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.book_name, "", new { @class = "text-danger" })
             </div>
         </div>
 
-        @* --- Mã NXB --- *@
         <div class="form-group">
-            @Html.LabelFor(model => model.publishers_id, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.publishers_id, "Mã NXB", new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.EditorFor(model => model.publishers_id, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.publishers_id, "", new { @class = "text-danger" })
             </div>
         </div>
 
-        @* --- PHẦN HÌNH ẢNH (ĐÃ SỬA) --- *@
+        @* --- PHẦN HÌNH ẢNH --- *@
         <div class="form-group">
-            @Html.LabelFor(model => model.image, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.image, "Ảnh bìa", new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @* Gán ID="image" cho textbox này *@
                 @Html.EditorFor(model => model.image, new { htmlAttributes = new { @class = "form-control", @id = "image" } })
 
-                @* Nút chọn file ẩn và nút giả *@
                 <input type="file" name="fileUpload" id="fileUpload" accept="image/*" style="display:none;" />
-                <input type="button" id="btnUpload" value="Choose Image" class="btn btn-success" style="margin-top:5px;" />
+                <input type="button" id="btnUpload" value="Chọn ảnh" class="btn btn-success" style="margin-top:5px;" />
 
-                @* Thẻ hiển thị ảnh sau khi chọn *@
                 <br />
-                <img src="" id="pictureUpload" width="200" style="margin-top:10px;" class="img-thumbnail" />
-
-                @Html.ValidationMessageFor(model => model.image, "", new { @class = "text-danger" })
+                <img src="" id="pictureUpload" width="200" style="margin-top:10px; border:1px solid #ddd;" class="img-thumbnail" />
             </div>
         </div>
 
-        @* --- Các trường còn lại --- *@
         <div class="form-group">
-            @Html.LabelFor(model => model.price, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.price, "Giá tiền", new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.EditorFor(model => model.price, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.price, "", new { @class = "text-danger" })
             </div>
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.update_date, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.update_date, "Ngày cập nhật", new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.update_date, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.update_date, "", new { @class = "text-danger" })
+                @Html.EditorFor(model => model.update_date, new { htmlAttributes = new { @class = "form-control", type = "date" } })
             </div>
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.quantity_instock, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.quantity_instock, "Số lượng tồn", new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.EditorFor(model => model.quantity_instock, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.quantity_instock, "", new { @class = "text-danger" })
             </div>
         </div>
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="Lưu Sách" class="btn btn-danger" style="background-color: #cd1818;" />
             </div>
         </div>
     </div>
 }
 
 <div>
-    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink("Quay lại danh sách", "Index")
 </div>
 
-@* PHẦN SCRIPT QUAN TRỌNG NHẤT *@
 @section upload {
     <script>
         $(function () {
-            // Khi nhấn nút Choose Image giả
             $('#btnUpload').click(function () {
                 $('#fileUpload').trigger('click');
             });
 
-            // Khi người dùng chọn file xong
             $('#fileUpload').change(function () {
                 if (window.FormData !== undefined) {
                     var fileUpload = $('#fileUpload').get(0);
@@ -114,12 +97,15 @@
                         processData: false,
                         data: formData,
                         success: function (urlImage) {
-                            // Gán đường dẫn vào ô textbox và hiện ảnh lên
-                            $('#pictureUpload').attr('src', urlImage);
-                            $('#image').val(urlImage);
+                            if (urlImage != "") {
+                                $('#pictureUpload').attr('src', urlImage);
+                                $('#image').val(urlImage);
+                            } else {
+                                alert("Upload thất bại!");
+                            }
                         },
                         error: function (err) {
-                            alert("Error during upload: " + err.statusText);
+                            alert("Có lỗi xảy ra: " + err.statusText);
                         }
                     });
                 }

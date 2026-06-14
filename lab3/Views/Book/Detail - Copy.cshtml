@@ -1,0 +1,68 @@
+﻿@model lab3.Models.book
+
+@{
+    ViewBag.Title = "Detail";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Detail</h2>
+
+<div>
+    <h4>book</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.book_name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.book_name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.publishers_id)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.publishers_id)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.image)
+        </dt>
+
+        <dd>
+            <img src="@Model.image" width="200" />
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.price)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.price)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.update_date)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.update_date)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.quantity_instock)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.quantity_instock)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.book_id }) |
+    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink("Back to List", "Orders", "Order")
+</p>

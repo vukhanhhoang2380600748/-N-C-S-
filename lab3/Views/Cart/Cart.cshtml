@@ -1,7 +1,9 @@
-﻿@model IEnumerable<lab3.Models.Cart>
+﻿@using lab3.Models
+@model IEnumerable<lab3.Models.book>
+
 @{
     ViewBag.Title = "Cart";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = "~/Views/Shared/_Layout.cshtml"; // Hoặc Layout bạn đang dùng
 }
 
 <h2>Your Cart</h2>
@@ -13,45 +15,77 @@
         <th>@Html.DisplayNameFor(model => model.iquantity)</th>
         <th>@Html.DisplayNameFor(model => model.Total)</th>
         <th></th>
+        <th></th>
     </tr>
     @foreach (var item in Model)
+
     {
         <tr>
             <td> @Html.DisplayFor(modelItem => item.book_name) </td>
-            <td> <img src="@item.image" width="120" /> </td>
-            <td> @String.Format("{0:0,0}", item.price) USD </td>
+            <td> <img src="@item.image" width="180" /> </td>
 
-            <td>
-                @using (Html.BeginForm("CartUpdate", "Cart", new { id = item.book_id }, FormMethod.Post))
-                {
-                    <div style="display: flex; gap: 5px;">
-                        <input type="number" min="1" name="txtSoLg" value="@item.iquantity" class="form-control" style="width:70px; display:inline-block;" />
-                        <input type="submit" value="Update" class="btn btn-success btn-sm" />
-                    </div>
-                }
-            </td>
+            @using (Html.BeginForm("CartUpdate", "Cart", new { @id = item.book_id }))
 
-            <td> @String.Format("{0:0,0}", item.Total) USD </td>
-            <td>
-                <a href="@Url.Action("Detail","Book",new{id=item.book_id})" class="btn btn-default btn-sm">Detail</a> |
-                @Html.ActionLink("Delete", "CartDelete", new { id = item.book_id }, new { @class = "btn btn-danger btn-sm" })
-            </td>
+            {
+
+                <td> @String.Format("{0:0,0}", item.price) USD </td>
+
+                <td>
+                    <input type="number" min="1" name="txtSoLg"
+                           value="@item.iquantity" />
+                </td>
+
+                <td> @Html.DisplayFor(modelItem => item.Total) </td>
+
+                <td>
+
+                    <a href="@Url.Action("Detail", "Book", new {id=item.book_id})">
+
+                       
+                        Detail
+                    </a> | @Html.ActionLink("Delete", "CartDelete", new { @id = item.book_id })
+
+                </td>
+
+                <td>
+                    <input type="submit" value="Update" class="btn btn-success" />
+
+                </td>
+
+            }
+
         </tr>
+
     }
 
-    <tr style="font-weight:bold; text-align:left; color:red">
+    <tr style="font-weight:bold; text-align:left; color: red">
+
         <td colspan="2"> Quantity Sum: @ViewBag.sumProductQuantity </td>
+
         <td colspan="2"> Quantity Total: @ViewBag.sumQuantity </td>
-        <td colspan="2"> Total: @String.Format("{0:0,0}", @ViewBag.Total) USD </td>
+
+        <td colspan="4"> Total: @String.Format("{0:0,0)", @ViewBag.Total) USD </td>
+
     </tr>
-    <tr style="font-weight:bold; text-align:right ">
-        <td colspan="6">
-            @Html.ActionLink("Cart Delete All", "AllCartDelete", null, new { @class = "btn btn-warning btn-sm" })
+
+    <tr style="font-weight:bold; color: blue; text-align:right ">
+
+        <td colspan="5">
+
+            @Html.ActionLink("Cart Delete", "AllCartDelete")
+
         </td>
+
     </tr>
-    <tr style="font-weight:bold; text-align:right ">
-        <td colspan="6" style="padding-top:15px;">
-            @Html.ActionLink("Place order", "PlaceOrder", "Cart", null, new { @class = "btn btn-primary btn-lg" })
+
+    <tr style="font-weight:bold; color: yellow; text-align:right">
+
+        <td colspan="5">
+
+            @Html.ActionLink("Place order", "PlaceOrder", "Cart")
+
         </td>
+
     </tr>
+
 </table>
